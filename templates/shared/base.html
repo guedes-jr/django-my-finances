@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% include "shared/partials/_header.html" %}
+    <title>{% block title %}{% endblock %}</title>
+    <!-- Estilos CSS globais -->
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    {% block extra_head %}{% endblock %}
+  </head>
+  <body>
+    <div class="container-scroller">
+      <!-- partial:partials/_sidebar.html -->
+      {% include "shared/partials/_sidebar.html" %}
+
+      <!-- partial -->
+      <div class="container-fluid page-body-wrapper">
+        <!-- partial:partials/_navbar.html -->
+        {% include "shared/partials/_navbar.html" %}
+
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            {% block content %}{% endblock %}
+          </div>
+          <!-- content-wrapper ends -->
+          <!-- partial:partials/_footer.html -->
+          {% include "shared/partials/_footer.html" %}
+          <!-- partial -->
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    {% include "shared/partials/_scripts.html" %}
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>

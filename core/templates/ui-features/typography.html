@@ -1,0 +1,367 @@
+{% extends 'shared/base.html' %}
+
+{% load static %}
+
+{% block title %}Tipografias - Corona{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h3 class="page-title"> Tipografia </h3>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#">Elementos UI</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Tipografia</li>
+    </ol>
+  </nav>
+</div>
+<div class="row">
+  <div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Títulos</h4>
+        <p class="card-description"> Adicione as tags <code>&lt;h1&gt;</code> to <code>&lt;h6&gt;</code> ou class <code>.h1</code> para <code>.h6</code>
+        </p>
+        <div class="template-demo">
+          <h1>h1. Cabeçalho</h1>
+          <h2>h2. Cabeçalho</h2>
+          <h3>h3. Cabeçalho</h3>
+          <h4>h4. Cabeçalho</h4>
+          <h5>h5. Cabeçalho</h5>
+          <h6>h6. Cabeçalho</h6>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Títulos com texto secundário</h4>
+        <p class="card-description"> Adicione texto secundário desbotado aos títulos </p>
+        <div class="template-demo">
+          <h1> h1. Cabeçalho <small class="text-muted"> Texto secundário </small>
+          </h1>
+          <h2> h2. Cabeçalho <small class="text-muted"> Texto secundário </small>
+          </h2>
+          <h3> h3. Cabeçalho <small class="text-muted"> Texto secundário </small>
+          </h3>
+          <h4> h4. Cabeçalho <small class="text-muted"> Texto secundário </small>
+          </h4>
+          <h5> h5. Cabeçalho <small class="text-muted"> Texto secundário </small>
+          </h5>
+          <h6> h6. Cabeçalho <small class="text-muted"> Texto secundário </small>
+          </h6>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Exibir títulos</h4>
+        <p class="card-description"> Adicione class <code>.display1</code> to <code>.display-4</code>
+        </p>
+        <div class="template-demo">
+          <h1 class="display-1">Mostrar 1</h1>
+          <h1 class="display-2">Mostrar 2</h1>
+          <h1 class="display-3">Mostrar 3</h1>
+          <h1 class="display-4">Mostrar 4</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 d-flex align-items-stretch">
+    <div class="row">
+      <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Parágrafo</h4>
+            <p class="card-description"> Escreva texto em <code>&lt;p&gt;</code> tag </p>
+            <p> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley not only five centuries, </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Tamanho do ícone</h4>
+            <p class="card-description"> Adicione class <code>.icon-lg</code>, <code>.icon-md</code>, <code>.icon-sm</code>
+            </p>
+            <div class="row">
+              <div class="col-md-4 d-flex align-items-center">
+                <div class="d-flex flex-row align-items-center">
+                  <i class="mdi mdi-compass icon-lg text-warning"></i>
+                  <p class="mb-0 ms-1"> Icon-lg </p>
+                </div>
+              </div>
+              <div class="col-md-4 d-flex align-items-center">
+                <div class="d-flex flex-row align-items-center">
+                  <i class="mdi mdi-compass icon-md text-success"></i>
+                  <p class="mb-0 ms-1"> Icon-md </p>
+                </div>
+              </div>
+              <div class="col-md-4 d-flex align-items-center">
+                <div class="d-flex flex-row align-items-center">
+                  <i class="mdi mdi-compass icon-sm text-danger"></i>
+                  <p class="mb-0 ms-1"> Icon-sm </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Citações em bloco</h4>
+        <p class="card-description"> Envolva o conteúdo dentro<code>&lt;blockquote class="blockquote"&gt;</code>
+        </p>
+        <blockquote class="blockquote">
+          <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+        </blockquote>
+      </div>
+      <div class="card-body">
+        <blockquote class="blockquote blockquote-primary">
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+          <footer class="blockquote-footer">Alguém famoso em <cite title="Source Title">Título da Fonte</cite>
+          </footer>
+        </blockquote>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Endereço</h4>
+        <p class="card-description"> Use <code>&lt;address&gt;</code> tag </p>
+        <div class="row">
+          <div class="col-md-6">
+            <address>
+              <p class="font-weight-bold">Corona imc</p>
+              <p> 695 lsom Ave, </p>
+              <p> Suite 00 </p>
+              <p> San Francisco, CA 94107 </p>
+            </address>
+          </div>
+          <div class="col-md-6">
+            <address class="text-primary">
+              <p class="font-weight-bold"> E-mail </p>
+              <p class="mb-2"> johndoe@examplemeail.com </p>
+              <p class="font-weight-bold"> Web Address </p>
+              <p> www.Corona.com </p>
+            </address>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <h4 class="card-title">Liderar</h4>
+        <p class="card-description"> Use a class <code>.lead</code>
+        </p>
+        <p class="lead"> Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. </p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Cor do texto</h4>
+        <p class="card-description"> Use a class <code>.text-primary</code>, <code>.text-secondary</code> etc. para texto nas cores do tema </p>
+        <div class="row">
+          <div class="col-md-6">
+            <p class="text-primary">.text-primary</p>
+            <p class="text-success">.text-success</p>
+            <p class="text-danger">.text-danger</p>
+            <p class="text-warning">.text-warning</p>
+            <p class="text-info">.text-info</p>
+          </div>
+          <div class="col-md-6">
+            <p class="text-light bg-dark ps-1">.text-light</p>
+            <p class="text-secondary">.text-secondary</p>
+            <p class="text-dark">.text-dark</p>
+            <p class="text-muted">.text-muted</p>
+            <p class="text-white bg-dark ps-1">.text-white</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Mídia mais alinhada</h4>
+        <div class="media">
+          <i class="mdi mdi-earth icon-md text-info d-flex align-self-start me-3"></i>
+          <div class="media-body">
+            <p class="card-text">Amanhã deveria ser livre, sem gravidez. Não há medo do chocolate.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Mídia alinhada ao centro</h4>
+        <div class="media">
+          <i class="mdi mdi-earth icon-md text-info d-flex align-self-center me-3"></i>
+          <div class="media-body">
+            <p class="card-text">Amanhã deveria ser livre, sem gravidez. Não há medo do chocolate.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Mídia alinhada inferior</h4>
+        <div class="media">
+          <i class="mdi mdi-earth icon-md text-info d-flex align-self-end me-3"></i>
+          <div class="media-body">
+            <p class="card-text">Amanhã deveria ser livre, sem gravidez. Não há medo do chocolate.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Texto Destacado</h4>
+        <p class="card-description"> Envolva o texto em <code>&lt;mark&gt;</code> para destacar o texto </p>
+        <p> É um longo tempo <mark class="bg-warning text-white">estabelecido</mark> fato de que o leitor se distrairá com o conteúdo legível de uma página ao observar seu layout. O objetivo de usar Lorem Ipsum é que ele tem uma distribuição mais ou menos normal </p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Lista não ordenada</h4>
+        <ul>
+          <li>Lorem ipsum dolor sit amet</li>
+          <li>Consectetur adipiscing elit</li>
+          <li>Integer molestie lorem at massa</li>
+          <li>Facilisis in pretium nisl aliquet</li>
+          <li>Nulla volutpat aliquam velit</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Texto em negrito</h4>
+        <p class="card-description"> Use a class<code>.font-weight-bold</code>
+        </p>
+        <p> É um longo tempo <span class="font-weight-bold">fato estabelecido</span> que um leitor se distrairá com o conteúdo legível de uma página ao observar seu layout. O objetivo de usar Lorem Ipsum é que ele tem uma distribuição mais ou menos normal </p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Lista Ordenada</h4>
+        <ol>
+          <li>Lorem ipsum dolor sit amet</li>
+          <li>Consectetur adipiscing elit</li>
+          <li>Integer molestie lorem at massa</li>
+          <li>Facilisis in pretium nisl aliquet</li>
+          <li>Nulla volutpat aliquam velit></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title text-primary">Sublinhado</h4>
+        <p class="card-description"> Embrulhe isso <code>&lt;u&gt;</code> tag para sublinhar </p>
+        <p>
+          <u>lorem ipsum dolor sit amet, consectetur mod tempor incididunt ut labore et dolore magna aliqua.</u>
+        </p>
+      </div>
+      <div class="card-body">
+        <h4 class="card-title text-danger">Minúsculos</h4>
+        <p class="card-description"> Use a class <code>.text-lowercase</code>
+        </p>
+        <p class="text-lowercase"> lorem ipsum dolor sit amet, consectetur mod tempor incididunt ut labore et dolore magna aliqua. </p>
+      </div>
+      <div class="card-body">
+        <h4 class="card-title text-warning">Maiúsculos</h4>
+        <p class="card-description"> Use a class <code>.text-uppercase</code>
+        </p>
+        <p class="text-uppercase"> lorem ipsum dolor sit amet, consectetur mod tempor incididunt ut labore et dolore magna aliqua. </p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Mudo</h4>
+        <p class="card-description"> Use a class <code>.text-muted</code>
+        </p>
+        <p class="text-muted"> lorem ipsum dolor sit amet, consectetur mod tempor incididunt ut labore et dolore magna aliqua. </p>
+      </div>
+      <div class="card-body">
+        <h4 class="card-title text-success">Batido</h4>
+        <p class="card-description"> Envolva o conteúdo em <code>&lt;del&gt;</code> tag </p>
+        <p>
+          <del> lorem ipsum dolor sit amet, consectetur mod tempor incididunt ut labore et dolore magna aliqua. </del>
+        </p>
+      </div>
+      <div class="card-body">
+        <h4 class="card-title text-info">Capitalizado</h4>
+        <p class="card-description"> Use a class <code>.text-capitalize</code>
+        </p>
+        <p class="text-capitalize"> lorem ipsum dolor sit amet, consectetur mod tempor incididunt ut labore et dolore magna aliqua. </p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Lista com ícone</h4>
+        <p class="card-description">Adicione a class <code>.list-ticked</code> to <code>&lt;ul&gt;</code></p>
+        <ul class="list-ticked">
+          <li>Lorem ipsum dolor sit amet</li>
+          <li>Consectetur adipiscing elit</li>
+          <li>Integer molestie lorem at massa</li>
+          <li>Facilisis in pretium nisl aliquet</li>
+          <li>Nulla volutpat aliquam velit></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Lista com ícone</h4>
+        <p class="card-description">Adicione a class <code>.list-arrow</code> to <code>&lt;ul&gt;</code></p>
+        <ul class="list-arrow">
+          <li>Lorem ipsum dolor sit amet</li>
+          <li>Consectetur adipiscing elit</li>
+          <li>Integer molestie lorem at massa</li>
+          <li>Facilisis in pretium nisl aliquet</li>
+          <li>Nulla volutpat aliquam velit></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Lista com ícone</h4>
+        <p class="card-description">Adicione a class <code>.list-star</code> to <code>&lt;ul&gt;</code></p>
+        <ul class="list-star">
+          <li>Lorem ipsum dolor sit amet</li>
+          <li>Consectetur adipiscing elit</li>
+          <li>Integer molestie lorem at massa</li>
+          <li>Facilisis in pretium nisl aliquet</li>
+          <li>Nulla volutpat aliquam velit></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
