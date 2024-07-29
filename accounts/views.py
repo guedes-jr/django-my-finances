@@ -34,7 +34,7 @@ def signup(request):
         print('avatar', avatar)
 
         # Verificar se todos os campos obrigatórios estão preenchidos
-        if any(len(field.strip()) == 0 for field in [first_name, last_name, cpf_cnpj, username, email, password, confirm_password, birth_date, phone_number, address, bio, description]) or (not avatar):
+        if any(len(field.strip()) == 0 for field in [first_name, last_name, cpf_cnpj, username, email, password, confirm_password]) or (not avatar):
             messages.add_message(request, constants.ERROR, 'Preencha todos os campos')
             return redirect('signup')
 
@@ -46,7 +46,7 @@ def signup(request):
         # Verificar se as senhas são iguais
         if password != confirm_password:
             messages.add_message(request, constants.ERROR, 'Digite duas senhas iguais!')
-            return render(request, 'signup.html')
+            return render(request, 'registration/signup.html')
         
         try:
             # Criar o usuário
@@ -66,13 +66,13 @@ def signup(request):
             )
             # Mensagem de sucesso
             messages.add_message(request, constants.SUCCESS, 'Usuário cadastrado com sucesso!')
-            return redirect('home')
+            return redirect('dashboard')
         except Exception as e:
             # Mensagem de erro
             messages.add_message(request, constants.ERROR, f'Erro interno do sistema: {str(e)}')
-            return render(request, 'signup.html')
+            return render(request, 'registration/signup.html')
 
-    return render(request, 'signup.html')
+    return render(request, 'registration/signup.html')
 
 
 # def logar(request):
