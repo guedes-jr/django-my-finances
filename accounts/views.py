@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.messages import constants
 from django.core.exceptions import ValidationError
+from django.contrib.auth import authenticate, login, logout
 from .models import CustomUser
 
 def signup(request):
@@ -66,7 +67,7 @@ def signup(request):
             )
             # Mensagem de sucesso
             messages.add_message(request, constants.SUCCESS, 'Usuário cadastrado com sucesso!')
-            return redirect('dashboard')
+            return redirect('login')
         except Exception as e:
             # Mensagem de erro
             messages.add_message(request, constants.ERROR, f'Erro interno do sistema: {str(e)}')
@@ -75,26 +76,26 @@ def signup(request):
     return render(request, 'registration/signup.html')
 
 
-# def logar(request):
-#   if request.user.is_authenticated:
-#     return redirect('/divulgar/dashboard')   
-  
-#   if request.method == 'GET':
-#     return render(request, 'login.html')
-  
-#   elif request.method == 'POST':
-#     nome = request.POST.get('nome')
-#     senha = request.POST.get('senha')
+def access(request):
+    if request.user.is_authenticated:
+        return redirect('/')   
 
-#     user = authenticate(username=nome,
-#                         password=senha)
-#     if user is not None:
-#       login(request, user)
-#       return redirect('/divulgar/dashboard')    
-#     else:
-#       messages.add_message(request, constants.ERROR, 'Usuário e/ou senha incorretos!')
-#       return render(request, 'login.html')
+    if request.method == 'GET':
+        return render(request, 'registration/access.html')
+
+    elif request.method == 'POST':
+        name = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(username=name,
+                            password=password)
+    if user is not None:
+        login(request, user)
+        return redirect('/')    
+    else:
+        messages.add_message(request, constants.ERROR, 'Usuário e/ou senha incorretos!')
+        return render(request, 'registration/access.html')
     
-# def sair(request):
-#   logout(request)
-#   return redirect('/auth/login')
+def signout(request):
+    logout(request)
+    return redirect('/accounts/login')
