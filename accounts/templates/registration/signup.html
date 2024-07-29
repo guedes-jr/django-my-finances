@@ -1,0 +1,113 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    {% include "shared/partials/_header.html" %}
+    <title>Registrar-se</title>
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="{% static 'registration/css/style.css' %}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" />
+  </head>
+  <body>
+    <div class="container-scroller">
+      <div class="container-fluid page-body-wrapper full-page-wrapper">
+        <div class="row w-100">
+          <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
+            <div class="card col-lg-6 mx-auto">
+              <div class="card-body px-5 py-5">
+                <h3 class="card-title text-start mb-3">Cadastrar-se</h3>
+                {% if messages %} {% for message in messages %}
+                <br />
+                <section class="alert {{message.tags}}">{{ message }}</section>
+                {% endfor %} {% endif %}
+                <form method="post" enctype="multipart/form-data" action="{% url 'signup' %}"> {% csrf_token %}
+                    <div class="form-group">
+                        <label>Primeiro Nome</label>
+                        <input type="text" name="first_name" class="form-control p_input">
+                    </div>
+                    <div class="form-group">
+                        <label>Último Nome</label>
+                        <input type="text" name="last_name" class="form-control p_input">
+                    </div>
+                    <div class="form-group">
+                        <label>CPF ou CNPJ</label>
+                        <input type="text" name="cpf_cnpj" class="form-control p_input">
+                    </div>
+                    <div class="form-group">
+                        <label>Usuário</label>
+                        <input type="text" name="username" class="form-control p_input">
+                        <p style="color: rgb(141, 37, 37)">Obrigatório. 150 caracteres ou menos. Letras, números e @/./+/-/_ apenas.</p>
+                    </div>
+                    <div class="form-group">
+                        <label>E-mail</label>
+                        <input type="email" name="email" class="form-control p_input">
+                    </div>
+                    <div class="form-group">
+                        <label>Senha</label>
+                        <input type="password" name="password" class="form-control p_input">
+                        <ul style="color: rgb(141, 37, 37)">
+                            <li>Sua senha não pode ser muito parecida com o resto das suas informações pessoais.</li>
+                            <li>Sua senha precisa conter pelo menos 8 caracteres.</li>
+                            <li>Sua senha não pode ser uma senha comumente utilizada.</li>
+                            <li>Sua senha não pode ser inteiramente numérica.</li>
+                        </ul>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirmar Senha</label>
+                        <input type="password" name="confirm_password" class="form-control p_input">
+                    </div>
+                    <div class="form-group">
+                        <label>Data de nascimento</label>
+                        <input type="date" name="birth_date" class="form-control p_input">
+                    </div>
+                    <div class="form-group">
+                        <label>Telefone</label>
+                        <input type="text" name="phone_number" class="form-control p_input">
+                    </div>
+                    <div class="form-group">
+                        <label>Endereço</label>
+                        <input type="text" name="address" class="form-control p_input">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleTextarea1">Biografia</label>
+                        <textarea class="form-control" name="bio" id="exampleTextarea1" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleTextarea1">Descrição</label>
+                        <textarea class="form-control" name="description" id="exampleTextarea1" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Foto de perfil</label>
+                        <input type="file" name="avatar" class="file-upload-default" style="display: none;">
+                        <div class="input-group col-xs-12 d-flex align-items-center">
+                            <input type="text" class="form-control file-upload-info" placeholder="Upload Image" disabled>
+                            <span class="input-group-append ms-2">
+                                <button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+                            </span>
+                        </div>
+                        <div class="image-preview mt-3 d-flex justify-content-center">
+                            <img id="imagePreview" src="#" alt="Image Preview" style="display: none;">
+                        </div>
+                    </div>                                                           
+                    <div class="text-center d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-block enter-btn">Cadastrar-se</button>
+                    </div>
+                  <p class="terms">Ao criar uma conta você está aceitando nossos<a href="#"> termos e Condições</a></p>
+                </form>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+        </div>
+        <!-- row ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    {% include "shared/partials/_scripts.html" %}
+    <script src="{% static 'registration/js/script.js' %}"></script>
+    <!-- endinject -->
+  </body>
+</html>
