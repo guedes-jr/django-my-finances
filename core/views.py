@@ -1,5 +1,37 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
+from django.contrib import messages
+from django.contrib.messages import constants
+from decimal import Decimal
+from datetime import datetime
+from .models import Account
+
+@login_required
+def portifolio(request):
+    if request.method == 'POST':
+        balance = request.POST.get('balance')
+        try:
+            new_portifolio = Account(
+                user = request.user,
+                account_name=request.POST.get('account_name'),
+                account_type=request.POST.get('account_type'),
+                balance=Decimal(balance),
+                created_at=datetime.now(),
+            )
+            new_portifolio.save()
+        except Exception as e:
+            messages.add_message(request, constants.ERROR, e)
+
+    portifolios = Account.objects.filter(user=request.user)
+    amount = portifolios.aggregate(total=Sum('balance'))['total']
+    return render(request, 
+                    'portifolio/portifolios.html', 
+                    { 
+                        'portifolios': portifolios,
+                        'account_types': Account.ACCOUNT_TYPES,
+                        'amount': amount
+                    })
 
 @login_required
 def dashboard(request):
@@ -16,10 +48,6 @@ def dropdowns(request):
 @login_required
 def typography(request):
     return render(request, 'ui-features/typography.html')
-
-@login_required
-def forms(request):
-    return render(request, 'forms/basic_elements.html')
 
 @login_required
 def tables(request):

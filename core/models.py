@@ -33,13 +33,19 @@ class Account(models.Model):
     ACCOUNT_TYPES = [
         ('CHECKING', 'Conta Corrente'),
         ('SAVINGS', 'Poupança'),
+        ('DIGITAL', 'Conta Digital'),
+        ('INVEST', 'Investimentos'),
+        ('OTHER', 'Outros')
     ]
 
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     account_name = models.CharField(max_length=50)
-    account_type = models.CharField(max_length=20, choices=ACCOUNT_TYPES)
+    account_type = models.CharField(max_length=20, choices=ACCOUNT_TYPES, default='OTHER')
     balance = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    def get_account_type_display(self):
+        return dict(self.ACCOUNT_TYPES).get(self.account_type, 'Desconhecido')
 
     def __str__(self):
         return f"{self.account_name} - {self.get_account_type_display()}"

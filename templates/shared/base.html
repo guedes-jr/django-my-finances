@@ -5,11 +5,10 @@
     {% include "shared/partials/_header.html" %}
     <title>{% block title %}{% endblock %}</title>
     <!-- Estilos CSS globais -->
-    <link rel="stylesheet" href="{% static 'css/global.css' %}">
     {% block extra_head %}{% endblock %}
   </head>
   <body>
-    <div class="container-scroller">
+    <div class="container-scroller" style="min-height: 100dvh">
       <!-- partial:partials/_sidebar.html -->
       {% include "shared/partials/_sidebar.html" %}
 

@@ -21,19 +21,6 @@ def signup(request):
         description = request.POST.get('description')
         avatar = request.FILES.get('avatar')
 
-        print('first_name', first_name)
-        print('last_name', last_name)
-        print('cpf_cnpj', cpf_cnpj)
-        print('username', username)
-        print('email', email)
-        print('password', password)
-        print('birth_date', birth_date)
-        print('phone_number', phone_number)
-        print('address', address)
-        print('bio', bio)
-        print('description', description)
-        print('avatar', avatar)
-
         # Verificar se todos os campos obrigatórios estão preenchidos
         if any(len(field.strip()) == 0 for field in [first_name, last_name, cpf_cnpj, username, email, password, confirm_password]) or (not avatar):
             messages.add_message(request, constants.ERROR, 'Preencha todos os campos')
