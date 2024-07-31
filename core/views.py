@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.messages import constants
 from decimal import Decimal
 from datetime import datetime
-from .models import Account, Goal
+from .models import Account, Goal, CreditCard
 from . import constants as c
 
 @login_required
@@ -101,7 +101,6 @@ def goal(request):
                         'categorys': c.CATEGORY_CHOICES
                     })
 
-
 @login_required
 def delete_goal(request, id):
     dlt_portifolio = Goal.objects.filter(id=id)
@@ -142,6 +141,74 @@ def update_goal(request, id):
                           'updt_goal' : updt_goal,
                           'categorys': c.CATEGORY_CHOICES
                       })
+@login_required
+def credcard(request):
+    if request.method == 'POST':
+        try:
+            new_card = CreditCard(
+                user = request.user,
+                card_type=request.POST.get('card_type'),
+                surname=request.POST.get('surname'),
+                cardholder_name=request.POST.get('cardholder_name'),
+                expiration_date=Decimal(request.POST.get('expiration_date')),
+                security_code=Decimal(request.POST.get('security_code')),
+                limit=request.POST.get('limit'),
+                created_at=datetime.now(),
+            )
+            new_card.save()
+        except Exception as e:
+            messages.add_message(request, constants.ERROR, e)
+
+    credcards = CreditCard.objects.filter(user=request.user)
+    return render(request, 
+                    'credcard/credcards.html', 
+                    { 
+                        'credcards': credcards,
+                        'card_types': c.CARD_TYPES
+                    })
+    
+@login_required
+def delete_credcard(request, id):
+    dlt_portifolio = CreditCard.objects.filter(id=id)
+    if dlt_portifolio.count() > 0:
+        try:
+            dlt_portifolio.delete()
+            messages.add_message(request, constants.SUCCESS, 'Meta removida com sucesso!')
+        except Exception as e:
+            messages.add_message(request, constants.ERROR, f'Erro ao remover a Meta, erro: {e}')
+    else:
+        messages.add_message(request, constants.ERROR, f'Não existe nenhuma Meta com o ID {id}')
+    return redirect('goal')
+
+
+def update_credcard(request, id):
+    if request.method == 'POST':
+        goal_id = request.POST.get('id')
+        description = request.POST.get('description')
+        try:
+            CreditCard.objects.filter(pk=goal_id) \
+                .update(
+                        category=request.POST.get('category'),
+                        description=description,
+                        current_value=Decimal(request.POST.get('current_value')),
+                        targeted_value=Decimal(request.POST.get('targeted_value')),
+                        start_date=request.POST.get('start_date'),
+                        end_date=request.POST.get('end_date'))
+                
+            messages.add_message(request, constants.SUCCESS, f'Meta {description} atualizada com sucesso!')
+        except Exception as e:
+            messages.add_message(request, constants.ERROR, e)
+        return redirect('goal')
+        
+    else:
+        updt_goal = get_object_or_404(Goal, id=id)
+        return render(request,
+                      'goal/update_goal.html',
+                      {
+                          'updt_credcard' : updt_credcard,
+                          'categorys': c.CATEGORY_CHOICES
+                      })
+
 
 @login_required
 def icons(request):

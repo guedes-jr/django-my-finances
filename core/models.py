@@ -22,6 +22,7 @@ class Account(models.Model):
         return f"{self.account_name} - {self.get_account_type_display()}"
 
 class Transaction(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     account = models.ForeignKey(Account, on_delete=models.CASCADE, verbose_name="Conta")
     category = models.CharField(max_length=20, choices=constants.CATEGORY_CHOICES, default='OTHER', verbose_name="Categoria")
     value = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name="Valor da transação")
@@ -37,7 +38,9 @@ class Transaction(models.Model):
         return f"{self.get_transaction_type_display()} - {self.value}"
 
 class CreditCard(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     card_type = models.CharField(max_length=20, choices=constants.CARD_TYPES, default='OTHER', verbose_name="Tipo de Cartão")
+    surname = models.TextField(blank=True, null=True, verbose_name="Apelido")
     card_number = models.CharField(max_length=19, verbose_name="Número do Cartão")
     cardholder_name = models.CharField(max_length=100, verbose_name="Nome do Titular")
     expiration_date = models.DateField(verbose_name="Data de Validade")
