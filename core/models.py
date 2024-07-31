@@ -25,6 +25,9 @@ class Category(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     name = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    def get_category_type_display(self):
+        return dict(self.CATEGORY_CHOICES).get(self.name, 'Desconhecido')
 
     def __str__(self):
         return self.name
@@ -80,3 +83,27 @@ class Budget(models.Model):
 
     def __str__(self):
         return f"{self.category} - {self.amount} ({self.start_date} to {self.end_date})"
+
+class Goal(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    description = models.TextField()
+    current_value = models.DecimalField(max_digits=10, decimal_places=2)
+    targeted_value = models.DecimalField(max_digits=10, decimal_places=2)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def get_account_type_display(self):
+        return dict(self.ACCOUNT_TYPES).get(self.account_type, 'Desconhecido')
+    
+    def get_format_current_value(self):
+        return str(self.current_value)
+    
+    def get_format_targeted_value(self):
+        return str(self.targeted_value)
+    
+    def __str__(self):
+        return f"{self.description[:25]} - {self.current_value} -> ({self.targeted_value} to {self.start_date} -> {self.end_date})"
+    
+    
