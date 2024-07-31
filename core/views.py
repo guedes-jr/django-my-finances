@@ -6,7 +6,12 @@ from django.contrib import messages
 from django.contrib.messages import constants
 from decimal import Decimal
 from datetime import datetime
-from .models import Account
+from .models import Account, Goal
+from . import constants as c
+
+@login_required
+def dashboard(request):
+    return render(request, 'home.html')
 
 @login_required
 def portifolio(request):
@@ -29,7 +34,7 @@ def portifolio(request):
                     'portifolio/portifolios.html', 
                     { 
                         'portifolios': portifolios,
-                        'account_types': Account.ACCOUNT_TYPES,
+                        'account_types': c.ACCOUNT_TYPES,
                         'amount': amount
                     })
 
@@ -56,7 +61,7 @@ def update_portifolio(request, id):
                     account_name=account_name,
                     account_type=request.POST.get('account_type'),
                     balance=Decimal(request.POST.get('balance')))
-            messages.add_message(request, constants.SUCCESS, f'Conta {account_id} - {account_name} atualizada com sucesso!')
+            messages.add_message(request, constants.SUCCESS, f'Conta {account_name} atualizada com sucesso!')
         except Exception as e:
             messages.add_message(request, constants.ERROR, e)
         return redirect('portifolio')
@@ -67,56 +72,80 @@ def update_portifolio(request, id):
                       'portifolio/update_portifolio.html',
                       {
                           'updt_portifolio' : updt_portifolio,
-                          'account_types': Account.ACCOUNT_TYPES
+                          'account_types': c.ACCOUNT_TYPES
                       })
 
 @login_required
-def dashboard(request):
-    return render(request, 'home.html')
+def goal(request):
+    if request.method == 'POST':
+        try:
+            new_goal = Goal(
+                user = request.user,
+                category=request.POST.get('category'),
+                description=request.POST.get('description'),
+                current_value=Decimal(request.POST.get('current_value')),
+                targeted_value=Decimal(request.POST.get('targeted_value')),
+                start_date=request.POST.get('start_date'),
+                end_date=request.POST.get('end_date'),
+                created_at=datetime.now(),
+            )
+            new_goal.save()
+        except Exception as e:
+            messages.add_message(request, constants.ERROR, e)
+
+    goals = Goal.objects.filter(user=request.user)
+    return render(request, 
+                    'goal/goals.html', 
+                    { 
+                        'goals': goals,
+                        'categorys': c.CATEGORY_CHOICES
+                    })
+
 
 @login_required
-def buttons(request):
-    return render(request, 'ui-features/buttons.html')
+def delete_goal(request, id):
+    dlt_portifolio = Goal.objects.filter(id=id)
+    if dlt_portifolio.count() > 0:
+        try:
+            dlt_portifolio.delete()
+            messages.add_message(request, constants.SUCCESS, 'Meta removida com sucesso!')
+        except Exception as e:
+            messages.add_message(request, constants.ERROR, f'Erro ao remover a Meta, erro: {e}')
+    else:
+        messages.add_message(request, constants.ERROR, f'Não existe nenhuma Meta com o ID {id}')
+    return redirect('goal')
 
-@login_required
-def dropdowns(request):
-    return render(request, 'ui-features/dropdowns.html')
-
-@login_required
-def typography(request):
-    return render(request, 'ui-features/typography.html')
-
-@login_required
-def tables(request):
-    return render(request, 'tables/basic-table.html')
-
-@login_required
-def charts(request):
-    return render(request, 'charts/chartjs.html')
+def update_goal(request, id):
+    if request.method == 'POST':
+        goal_id = request.POST.get('id')
+        description = request.POST.get('description')
+        try:
+            Goal.objects.filter(pk=goal_id) \
+                .update(
+                        category=request.POST.get('category'),
+                        description=description,
+                        current_value=Decimal(request.POST.get('current_value')),
+                        targeted_value=Decimal(request.POST.get('targeted_value')),
+                        start_date=request.POST.get('start_date'),
+                        end_date=request.POST.get('end_date'))
+                
+            messages.add_message(request, constants.SUCCESS, f'Meta {description} atualizada com sucesso!')
+        except Exception as e:
+            messages.add_message(request, constants.ERROR, e)
+        return redirect('goal')
+        
+    else:
+        updt_goal = get_object_or_404(Goal, id=id)
+        return render(request,
+                      'goal/update_goal.html',
+                      {
+                          'updt_goal' : updt_goal,
+                          'categorys': c.CATEGORY_CHOICES
+                      })
 
 @login_required
 def icons(request):
     return render(request, 'icons/font-awesome.html')
-
-@login_required
-def login(request):
-    return render(request, 'login.html')
-
-@login_required
-def register(request):
-    return render(request, 'register.html')
-
-@login_required
-def not_found(request):
-    return render(request, 'error-404.html')
-
-@login_required
-def internal_server_error(request):
-    return render(request, 'error-500.html')
-
-@login_required
-def blankpage(request):
-    return render(request, 'blank-page.html')
 
 @login_required
 def documentation(request):

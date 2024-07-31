@@ -1,0 +1,155 @@
+{% extends 'shared/base.html' %}
+
+{% load static %}
+{% load math_filters %}
+
+{% block title %}Carteias{% endblock %}
+
+{% block content %}
+<div class="modal fade" id="modal_1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content modal-lg">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Cadastrar nova meta</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+          <form class="forms-sample" method="post" enctype="multipart/form-data" action="{% url 'goal' %}"> {% csrf_token %}
+            <div class="form-group row">
+              <label for="description" class="col-sm-3 col-form-label">Descriçao <span style="color: red">*</span></label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="description" name="description" placeholder="Nome" required>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="category" class="col-sm-3 col-form-label">Categoria <span style="color: red">*</span></label>
+              <div class="col-sm-9">
+                <select class="form-select" id="category" name="category" required>
+                    {% for code, name in categorys %}
+                        <option value="{{ code }}">{{ name }}</option>
+                    {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="current_value" class="col-sm-3 col-form-label">Valor atual <span style="color: red">*</span></label>
+              <div class="col-sm-9">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text bg-primary text-white">$</span>
+                  </div>
+                  <input type="number" class="form-control" id="current_value" name="current_value" value="0.00" required>
+                  <div class="input-group-append">
+                    <span class="input-group-text">.00</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="targeted_value" class="col-sm-3 col-form-label">Valor Desejado <span style="color: red">*</span></label>
+              <div class="col-sm-9">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text bg-primary text-white">$</span>
+                  </div>
+                  <input type="number" class="form-control" id="targeted_value" name="targeted_value" value="0.00" required>
+                  <div class="input-group-append">
+                    <span class="input-group-text">.00</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="start_date" class="col-sm-3 col-form-label">Data Início <span style="color: red">*</span></label>
+              <div class="col-sm-9">
+                <input type="date" class="form-control" id="start_date" name="start_date" placeholder="dd/mm/yyyy"  required>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="end_date" class="col-sm-3 col-form-label">Data Final <span style="color: red">*</span></label>
+              <div class="col-sm-9">
+                <input type="date" class="form-control" id="end_date" name="end_date" placeholder="dd/mm/yyyy"  required>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-primary">Cadastrar</button>
+            </div>
+          </form>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="page-header">
+  <h3 class="page-title"> Minhas Metas </h3>
+  {% if messages %} {% for message in messages %}
+  <br />
+  <section class="alert {{message.tags}}">{{ message }}</section>
+  {% endfor %} {% endif %}
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active" aria-current="page">Contas</li>
+    </ol>
+  </nav>
+</div>
+<div class="row">
+  <div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal_1">
+          <i class="fa fa-plus"></i> Adicionar Meta
+        </button>
+        </p>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th> Usuário </th>
+                <th> Descrição </th>
+                <th> Valor Atual </th>
+                <th> Percentual </th>
+                <th> Valor Desejado </th>
+                <th> Data Inicial </th>
+                <th> Data Final </th>
+                <th> Categoria </th>
+                <th> Opções </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for goal in goals %}
+              <tr>
+                <td class="py-1">
+                  <img src="{{goal.user.avatar.url}}" alt="image" />
+                </td>
+                <td> {{goal.description}} </td>
+                <td> {{goal.current_value}} </td>
+                <td>
+                  <div class="progress">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: {{ goal.current_value|percentage:goal.targeted_value }}%" aria-valuenow="{{ goal.current_value|percentage:goal.targeted_value }}" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </td>
+                <td> {{goal.targeted_value}} </td>
+                <td> {{goal.start_date}} </td>
+                <td> {{goal.end_date}} </td>
+                <td> {{goal.get_category_type_display}} </td>
+                <td>
+                  <a href="{% url 'update_goal' id=goal.id %}" style="padding: 7px; cursor: pointer; font-size: 18px">
+                    <i class="fa fa-edit text-primary"></i>
+                  </a>  |
+                  <a href="{% url 'delete_goal' id=goal.id %}" style="padding: 8px; cursor: pointer; font-size: 20px">
+                    <i class="fa fa-trash-o text-danger"></i>
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

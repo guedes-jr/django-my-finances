@@ -1,0 +1,98 @@
+{% extends 'shared/base.html' %}
+
+{% load static %}
+{% load math_filters %}
+
+{% block title %}Carteias{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h3 class="page-title"> Minhas Contas - Editar </h3>
+  {% if messages %} {% for message in messages %}
+  <br />
+  <section class="alert {{message.tags}}">{{ message }}</section>
+  {% endfor %} {% endif %}
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item" aria-current="page">Contas</li>
+      <li class="breadcrumb-item active" aria-current="page">Editar</li>
+    </ol>
+  </nav>
+</div>
+<div class="row">
+  <div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h3>Editando meta: {{ updt_goal.description }}</h3>
+        <form class="forms-sample" method="post" enctype="multipart/form-data" action="{% url 'update_goal' updt_goal.id %}"> {% csrf_token %}
+          <input type="hidden" name="id" value="{{ updt_goal.id }}">
+          <div class="form-group row">
+            <label for="description" class="col-sm-3 col-form-label">Descriçao <span style="color: red">*</span></label>
+            <div class="col-sm-9">
+              <input type="text" class="form-control" id="description" name="description" value="{{updt_goal.description}}" placeholder="Nome" required>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="category" class="col-sm-3 col-form-label">Categoria <span style="color: red">*</span></label>
+            <div class="col-sm-9">
+              <select class="form-select" id="category" name="category" required>
+                  {% for code, name in categorys %}
+                      <option value="{{ code }}" {% if code == updt_goal.category %}style="color: #fff" selected{% endif %}>{{ name }}</option>
+                  {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="current_value" class="col-sm-3 col-form-label">Valor atual <span style="color: red">*</span></label>
+            <div class="col-sm-9">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text bg-primary text-white">$</span>
+                </div>
+                <input type="number" class="form-control" id="current_value" name="current_value" value="{{updt_goal.get_format_current_value}}" required>
+                <div class="input-group-append">
+                  <span class="input-group-text">.00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="targeted_value" class="col-sm-3 col-form-label">Valor Desejado <span style="color: red">*</span></label>
+            <div class="col-sm-9">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text bg-primary text-white">$</span>
+                </div>
+                <input type="number" class="form-control" id="targeted_value" name="targeted_value" value="{{updt_goal.get_format_targeted_value}}" required>
+                <div class="input-group-append">
+                  <span class="input-group-text">.00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="start_date" class="col-sm-3 col-form-label">Data Início <span style="color: red">*</span></label>
+            <div class="col-sm-9">
+              <input type="date" class="form-control" id="start_date" name="start_date" value="{{updt_goal.get_data_start_date}}" required>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="end_date" class="col-sm-3 col-form-label">Data Final <span style="color: red">*</span></label>
+            <div class="col-sm-9">
+              <input type="date" class="form-control" id="end_date" name="end_date" value="{{updt_goal.get_data_end_date}}" required>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-sm-9">
+              <div class="input-group text-center">
+                <button type="submit" class="btn btn-success">Atualizar</button>
+                <a href="{% url 'portifolio' %}" type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</a>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

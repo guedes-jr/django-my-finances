@@ -75,7 +75,7 @@
       </a>
     </li>
     <li class="nav-item menu-items">
-      <a class="nav-link" href="{% url 'tables' %}">
+      <a class="nav-link" href="{% url 'icons' %}">
         <span class="menu-icon">
           <i class="fa fa-money"></i>
         </span>
@@ -93,11 +93,20 @@
       </a>
       <div class="collapse" id="ui-basic">
         <ul class="nav flex-column sub-menu">
-          <li class="nav-item"> <a class="nav-link" href="{% url 'buttons' %}">...</a></li>
-          <li class="nav-item"> <a class="nav-link" href="{% url 'dropdowns' %}">....</a></li>
-          <li class="nav-item"> <a class="nav-link" href="{% url 'typography' %}">....</a></li>
+          <li class="nav-item"> <a class="nav-link" href="#">...</a></li>
+          <li class="nav-item"> <a class="nav-link" href="#">....</a></li>
+          <li class="nav-item"> <a class="nav-link" href="#">....</a></li>
         </ul>
       </div>
+    </li>
+    <li class="nav-item menu-items">
+      <a class="nav-link" href="{% url 'goal' %}">
+        <span class="menu-icon">
+          <i class="fa fa-rocket"></i>
+        </span>
+        <span class="menu-title">Metas</span>
+        <i class="menu-arrow"></i>
+      </a>
     </li>
     <li class="nav-item menu-items">
       <a class="nav-link" href="{% url 'icons' %}">
@@ -120,9 +129,6 @@
         <ul class="nav flex-column sub-menu">
           <li class="nav-item"> <a class="nav-link" href="{% url 'login' %}"> Entrar </a></li>
           <li class="nav-item"> <a class="nav-link" href="{% url 'signup' %}"> Registrar </a></li>
-          <li class="nav-item"> <a class="nav-link" href="{% url 'not_found' %}"> Página - 404 </a></li>
-          <li class="nav-item"> <a class="nav-link" href="{% url 'internal_server_error' %}"> Página - 500 </a></li>
-          <li class="nav-item"> <a class="nav-link" href="{% url 'blankpage' %}"> Página em branco </a></li>
         </ul>
       </div>
     </li>
