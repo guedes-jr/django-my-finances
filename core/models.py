@@ -47,6 +47,9 @@ class Account(models.Model):
     def get_account_type_display(self):
         return dict(self.ACCOUNT_TYPES).get(self.account_type, 'Desconhecido')
 
+    def get_format_balance(self):
+        return str(self.balance)
+
     def __str__(self):
         return f"{self.account_name} - {self.get_account_type_display()}"
 
