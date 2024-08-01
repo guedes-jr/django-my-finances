@@ -25,10 +25,14 @@
     <div class="container-scroller">
       <div class="container-fluid page-body-wrapper full-page-wrapper">
         <div class="row w-100">
-          <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
+          <div class="content-wrapper full-page-wrapper d-flex align-items-center auth lock-full-bg">
             <div class="card col-lg-4 mx-auto">
               <div class="card-body px-5 py-5">
-                <h3 class="card-title text-start mb-3">Acessar</h3>
+                <div style="display: flex; justify-content: space-between;">
+                  <h3 class="card-title text-start mb-3">Acessar</h3>
+                  <a href="{% url 'signup' %}"><h3 class="card-title text-start mb-3">Registrar-se</h3></a>
+                </div>
+                
                 {% if messages %} {% for message in messages %}
                 <br />
                 <section class="alert {{message.tags}}">{{ message }}</section>
