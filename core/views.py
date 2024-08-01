@@ -147,24 +147,25 @@ def credcard(request):
         try:
             new_card = CreditCard(
                 user = request.user,
-                card_type=request.POST.get('card_type'),
+                card_type = CreditCard.identify_card_type(request.POST.get('card_number')),
+                card_number = request.POST.get('card_number'),
                 surname=request.POST.get('surname'),
                 cardholder_name=request.POST.get('cardholder_name'),
-                expiration_date=Decimal(request.POST.get('expiration_date')),
-                security_code=Decimal(request.POST.get('security_code')),
-                limit=request.POST.get('limit'),
+                expiration_date=request.POST.get('expiration_date'),
+                security_code=request.POST.get('security_code'),
+                limit=Decimal(request.POST.get('limit')),
+                current_limit=Decimal(request.POST.get('current_limit')),
                 created_at=datetime.now(),
             )
             new_card.save()
         except Exception as e:
-            messages.add_message(request, constants.ERROR, e)
+            messages.add_message(request, constants.ERROR, f'{e}\n{new_card.__dict__}')
 
     credcards = CreditCard.objects.filter(user=request.user)
     return render(request, 
                     'credcard/credcards.html', 
                     { 
-                        'credcards': credcards,
-                        'card_types': c.CARD_TYPES
+                        'credcards': credcards
                     })
     
 @login_required
@@ -173,40 +174,39 @@ def delete_credcard(request, id):
     if dlt_portifolio.count() > 0:
         try:
             dlt_portifolio.delete()
-            messages.add_message(request, constants.SUCCESS, 'Meta removida com sucesso!')
+            messages.add_message(request, constants.SUCCESS, 'Cartão de crétido removido com sucesso!')
         except Exception as e:
-            messages.add_message(request, constants.ERROR, f'Erro ao remover a Meta, erro: {e}')
+            messages.add_message(request, constants.ERROR, f'Erro ao remover a Cartão de crédito, erro: {e}')
     else:
-        messages.add_message(request, constants.ERROR, f'Não existe nenhuma Meta com o ID {id}')
-    return redirect('goal')
+        messages.add_message(request, constants.ERROR, f'Não existe nenhum Cartão de crédito com o ID {id}')
+    return redirect('credcard')
 
 
 def update_credcard(request, id):
     if request.method == 'POST':
-        goal_id = request.POST.get('id')
-        description = request.POST.get('description')
+        card_id = request.POST.get('id')
+        surname = request.POST.get('surname')
         try:
-            CreditCard.objects.filter(pk=goal_id) \
+            CreditCard.objects.filter(pk=card_id) \
                 .update(
-                        category=request.POST.get('category'),
-                        description=description,
-                        current_value=Decimal(request.POST.get('current_value')),
-                        targeted_value=Decimal(request.POST.get('targeted_value')),
-                        start_date=request.POST.get('start_date'),
-                        end_date=request.POST.get('end_date'))
+                        surname = surname,
+                        cardholder_name=request.POST.get('cardholder_name'),
+                        expiration_date=request.POST.get('expiration_date'),
+                        limit=Decimal(request.POST.get('limit')),
+                        current_limit=Decimal(request.POST.get('current_limit'))
+                    )
                 
-            messages.add_message(request, constants.SUCCESS, f'Meta {description} atualizada com sucesso!')
+            messages.add_message(request, constants.SUCCESS, f'Cartão de crédito {surname} atualizada com sucesso!')
         except Exception as e:
             messages.add_message(request, constants.ERROR, e)
-        return redirect('goal')
+        return redirect('credcard')
         
     else:
-        updt_goal = get_object_or_404(Goal, id=id)
+        updt_credcard = get_object_or_404(CreditCard, id=id)
         return render(request,
-                      'goal/update_goal.html',
+                      'credcard/update_credcard.html',
                       {
                           'updt_credcard' : updt_credcard,
-                          'categorys': c.CATEGORY_CHOICES
                       })
 
 

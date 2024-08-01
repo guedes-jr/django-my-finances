@@ -3,13 +3,13 @@ from accounts.models import CustomUser
 from django.utils import timezone
 from django.db import models
 import re
-from . import constants
+from . import constants, fields
 
 class Account(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, default=1)
     account_name = models.CharField(max_length=50, verbose_name="Nome para a conta")
     account_type = models.CharField(max_length=20, choices=constants.ACCOUNT_TYPES, default='OTHER', verbose_name="Tipo de Conta")
-    balance = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Balanço")
+    balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name="Balanço")
     created_at = models.DateTimeField(auto_now_add=True)
 
     def get_account_type_display(self):
@@ -22,7 +22,7 @@ class Account(models.Model):
         return f"{self.account_name} - {self.get_account_type_display()}"
 
 class Transaction(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, default=1)
     account = models.ForeignKey(Account, on_delete=models.CASCADE, verbose_name="Conta")
     category = models.CharField(max_length=20, choices=constants.CATEGORY_CHOICES, default='OTHER', verbose_name="Categoria")
     value = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name="Valor da transação")
@@ -38,14 +38,16 @@ class Transaction(models.Model):
         return f"{self.get_transaction_type_display()} - {self.value}"
 
 class CreditCard(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, default=1)
     card_type = models.CharField(max_length=20, choices=constants.CARD_TYPES, default='OTHER', verbose_name="Tipo de Cartão")
     surname = models.TextField(blank=True, null=True, verbose_name="Apelido")
     card_number = models.CharField(max_length=19, verbose_name="Número do Cartão")
     cardholder_name = models.CharField(max_length=100, verbose_name="Nome do Titular")
-    expiration_date = models.DateField(verbose_name="Data de Validade")
+    expiration_date = fields.MonthYearField(verbose_name="Data de Validade")
     security_code = models.CharField(max_length=4, verbose_name="Código de Segurança (CVV)")
-    limit = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Limite")
+    limit = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name="Limite")
+    current_limit = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name="Limite")
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.cardholder_name} - {self.card_type}"
@@ -61,6 +63,12 @@ class CreditCard(models.Model):
         self.card_type = self.identify_card_type(self.card_number)
         if self.card_type == 'UNKNOWN':
             raise ValidationError('Número do cartão inválido ou bandeira não reconhecida.')
+    
+    def get_format_limit_value(self):
+        return str(self.limit)
+    
+    def get_format_current_limit_value(self):
+        return str(self.current_limit)
 
     @staticmethod
     def identify_card_type(card_number):
@@ -77,11 +85,11 @@ class CreditCard(models.Model):
             return 'UNKNOWN'
 
 class Goal(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, default=1)
     category = models.CharField(max_length=20, choices=constants.CATEGORY_CHOICES, default='OTHER', verbose_name="Categoria")
     description = models.TextField(verbose_name="Descrição")
-    current_value = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Valor atual")
-    targeted_value = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Valor Almejado")
+    current_value = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name="Valor atual")
+    targeted_value = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, verbose_name="Valor Almejado")
     start_date = models.DateField(verbose_name="Data de início")
     end_date = models.DateField(verbose_name="Data final para meta")
     created_at = models.DateTimeField(auto_now_add=True)
