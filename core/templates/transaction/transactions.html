@@ -1,0 +1,163 @@
+{% extends 'shared/base.html' %}
+
+{% load static %}
+{% load math_filters %}
+
+{% block title %}Carteias{% endblock %}
+
+{% block content %}
+<div class="modal fade" id="modal_1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content modal-lg">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Adicionar nova Transação</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+          <form class="forms-sample" method="post" enctype="multipart/form-data" action="{% url 'transaction' %}"> {% csrf_token %}
+            <div class="form-group row">
+              <label for="account_id" class="col-sm-3 col-form-label">Conta <span style="color: red">*</span></label>
+              <div class="col-sm-9">
+                <select class="form-select" id="account_id" name="account_id" required>
+                    {% for account in accounts %}
+                        <option value="{{ account.id }}">{{ account }}</option>
+                    {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="category" class="col-sm-3 col-form-label">Categoria <span style="color: red">*</span></label>
+              <div class="col-sm-9">
+                <select class="form-select" id="category" name="category" required>
+                    {% for code, name in categorys %}
+                        <option value="{{ code }}">{{ name }}</option>
+                    {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="value" class="col-sm-3 col-form-label">Valor <span style="color: red">*</span></label>
+              <div class="col-sm-9">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text bg-primary text-white">$</span>
+                  </div>
+                  <input type="number" class="form-control" id="value" name="value" value="0.00" required>
+                  <div class="input-group-append">
+                    <span class="input-group-text">.00</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="transaction_date" class="col-sm-3 col-form-label">Data da transação <span style="color: red">*</span></label>
+              <div class="col-sm-9">
+                <input type="date" class="form-control" id="transaction_date" name="transaction_date" placeholder="dd/mm/yyyy"  required>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="description" class="col-sm-3 col-form-label">Descrição <span style="color: red">*</span></label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="description" name="description" placeholder="Descrição" required>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="transaction_type" class="col-sm-3 col-form-label">Tipo <span style="color: red">*</span></label>
+              <div class="col-sm-9">
+                <select class="form-select" id="transaction_type" name="transaction_type" required>
+                    {% for code, name in types %}
+                        <option value="{{ code }}">{{ name }}</option>
+                    {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-primary">Cadastrar</button>
+            </div>
+          </form>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="page-header">
+  <h3 class="page-title"> Minhas Transações </h3>
+  {% if messages %} {% for message in messages %}
+  <br />
+  <section class="alert {{message.tags}}">{{ message }}</section>
+  {% endfor %} {% endif %}
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active" aria-current="page">Transações</li>
+    </ol>
+  </nav>
+</div>
+<div class="row">
+  <div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal_1">
+          <i class="fa fa-plus"></i> Adicionar nova Transação
+        </button>
+        </p>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th> Descrição </th>
+                <th> Categoria </th>
+                <th> Valor </th>
+                <th> Data da transação </th>
+                <th> Conta </th>
+                <th> Tipo de transação </th>
+                <th> Criado em </th>
+                <th> Opções </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for transaction in transactions %}
+              <tr>
+                <td> {{transaction.description}} </td>
+                <td> {{transaction.get_category_display}} </td>
+                <td> {{transaction.value}} </td>
+                <td> {{transaction.transaction_date}} </td>
+                <td> {{transaction.account}} </td>
+                <td style="display: flex; align-items: center; gap: 1rem">
+                  {{transaction.get_transaction_type_display}} 
+                  {% if transaction.get_transaction_type_display == "Débito" %}
+                    <div class="icon icon-box-danger">
+                    <span class="mdi mdi-arrow-bottom-left icon-item"></span>
+                    </div>
+                  {% elif transaction.get_transaction_type_display == "Crédito" %}
+                    <div class="icon icon-box-success ">
+                    <span class="mdi mdi-arrow-top-right icon-item"></span>
+                    </div>
+                  {% endif %}
+                </td>
+                <td> {{transaction.created_at}} </td>
+                <td>
+                  <a href="{% url 'update_transaction' id=transaction.id %}" style="padding: 7px; cursor: pointer; font-size: 18px">
+                    <i class="fa fa-edit text-primary"></i>
+                  </a>  |
+                  <a href="{% url 'delete_transaction' id=transaction.id %}" style="padding: 8px; cursor: pointer; font-size: 20px">
+                    <i class="fa fa-trash-o text-danger"></i>
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+{% block extra_js %}
+<script src="{% static 'credcard/script.js' %}"></script>
+{% endblock %}

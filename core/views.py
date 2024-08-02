@@ -13,6 +13,79 @@ from . import constants as c
 def dashboard(request):
     return render(request, 'home.html')
 
+    
+@login_required
+def transaction(request):
+    if request.method == 'POST':
+        try:
+            new_transaction = Transaction(
+                user = request.user,
+                account=Account.objects.get(id=request.POST.get('account_id')),
+                category=request.POST.get('category'),
+                value=Decimal(request.POST.get('value')),
+                transaction_date=request.POST.get('transaction_date'),
+                description=request.POST.get('description'),
+                transaction_type=request.POST.get('transaction_type'),
+                created_at=datetime.now(),
+            )
+            new_transaction.save()
+        except Exception as e:
+            messages.add_message(request, constants.ERROR, e)
+
+    transactions = Transaction.objects.filter(user=request.user)
+    accounts = Account.objects.filter(user=request.user)
+    return render(request, 
+                    'transaction/transactions.html', 
+                    { 
+                        'transactions': transactions,
+                        'categorys': c.CATEGORY_CHOICES,
+                        'types': c.TRANSACTION_TYPES,
+                        'accounts': accounts
+                    })
+
+@login_required
+def delete_transaction(request, id):
+    dlt_transaction = Transaction.objects.filter(id=id)
+    if dlt_transaction.count() > 0:
+        try:
+            dlt_transaction.delete()
+            messages.add_message(request, constants.SUCCESS, 'Transação removida com sucesso!')
+        except Exception as e:
+            messages.add_message(request, constants.ERROR, f'Erro ao remover a transação, erro: {e}')
+    else:
+        messages.add_message(request, constants.ERROR, f'Não existe nenhuma transação com o ID {id}')
+    return redirect('transaction')
+
+def update_transaction(request, id):
+    if request.method == 'POST':
+        description = request.POST.get('description')
+        transaction_id = request.POST.get('id')
+        try:
+            Transaction.objects.filter(pk=transaction_id) \
+                .update(
+                    account=Account.objects.get(id=request.POST.get('account_id')),
+                    category=request.POST.get('category'),
+                    value=Decimal(request.POST.get('value')),
+                    transaction_date=request.POST.get('transaction_date'),
+                    description=request.POST.get('description'),
+                    transaction_type=request.POST.get('transaction_type'))
+            messages.add_message(request, constants.SUCCESS, f'Transação {description} atualizada com sucesso!')
+        except Exception as e:
+            messages.add_message(request, constants.ERROR, e)
+        return redirect('transaction')
+        
+    else:
+        updt_transaction = get_object_or_404(Transaction, id=id)
+        accounts = Account.objects.filter(user=request.user)
+        return render(request, 
+                        'transaction/update_transaction.html', 
+                        { 
+                            'updt_transaction': updt_transaction,
+                            'categorys': c.CATEGORY_CHOICES,
+                            'types': c.TRANSACTION_TYPES,
+                            'accounts': accounts
+                        })
+
 @login_required
 def portifolio(request):
     if request.method == 'POST':
@@ -207,65 +280,4 @@ def update_credcard(request, id):
                       'credcard/update_credcard.html',
                       {
                           'updt_credcard' : updt_credcard,
-                      })
-
-@login_required
-def transaction(request):
-    if request.method == 'POST':
-        try:
-            new_transaction = Transaction(
-                user = request.user,
-                
-                created_at=datetime.now(),
-            )
-            new_transaction.save()
-        except Exception as e:
-            messages.add_message(request, constants.ERROR, f'{e}\n{new_transaction.__dict__}')
-
-    credcards = CreditCard.objects.filter(user=request.user)
-    return render(request, 
-                    'credcard/credcards.html', 
-                    { 
-                        'credcards': credcards
-                    })
-    
-@login_required
-def delete_transaction(request, id):
-    dlt_portifolio = CreditCard.objects.filter(id=id)
-    if dlt_portifolio.count() > 0:
-        try:
-            dlt_portifolio.delete()
-            messages.add_message(request, constants.SUCCESS, 'Cartão de crétido removido com sucesso!')
-        except Exception as e:
-            messages.add_message(request, constants.ERROR, f'Erro ao remover a Cartão de crédito, erro: {e}')
-    else:
-        messages.add_message(request, constants.ERROR, f'Não existe nenhum Cartão de crédito com o ID {id}')
-    return redirect('transaction')
-
-
-def update_transaction(request, id):
-    if request.method == 'POST':
-        card_id = request.POST.get('id')
-        surname = request.POST.get('surname')
-        try:
-            CreditCard.objects.filter(pk=card_id) \
-                .update(
-                        surname = surname,
-                        cardholder_name=request.POST.get('cardholder_name'),
-                        expiration_date=request.POST.get('expiration_date'),
-                        limit=Decimal(request.POST.get('limit')),
-                        current_limit=Decimal(request.POST.get('current_limit'))
-                    )
-                
-            messages.add_message(request, constants.SUCCESS, f'Cartão de crédito {surname} atualizada com sucesso!')
-        except Exception as e:
-            messages.add_message(request, constants.ERROR, e)
-        return redirect('transaction')
-        
-    else:
-        updt_transaction = get_object_or_404(CreditCard, id=id)
-        return render(request,
-                      'transaction/update_transaction.html',
-                      {
-                          'updt_transaction' : updt_transaction,
                       })

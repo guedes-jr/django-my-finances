@@ -7,14 +7,14 @@
 
 {% block content %}
 <div class="page-header">
-  <h3 class="page-title"> Meu Cartão - Editar </h3>
+  <h3 class="page-title"> Minha Trnsação - Editar </h3>
   {% if messages %} {% for message in messages %}
   <br />
   <section class="alert {{message.tags}}">{{ message }}</section>
   {% endfor %} {% endif %}
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item" aria-current="page">Cartões de Crédito</li>
+      <li class="breadcrumb-item" aria-current="page">Transações</li>
       <li class="breadcrumb-item active" aria-current="page">Editar</li>
     </ol>
   </nav>
@@ -23,29 +23,37 @@
   <div class="col-lg-12 grid-margin stretch-card">
     <div class="card">
       <div class="card-body">
-        <h3>Editando Cartão: {{ updt_credcard.surname }}</h3>
-        <form class="forms-sample" method="post" enctype="multipart/form-data" action="{% url 'update_credcard' updt_credcard.id %}"> {% csrf_token %}
-          <input type="hidden" name="id" value="{{ updt_credcard.id }}">
+        <h3>Editando Cartão: {{ updt_transaction.description }}</h3>
+        <form class="forms-sample" method="post" enctype="multipart/form-data" action="{% url 'update_transaction' updt_transaction.id %}"> {% csrf_token %}
+          <input type="hidden" name="id" value="{{ updt_transaction.id }}">
           <div class="form-group row">
-            <label for="cardholder_name" class="col-sm-3 col-form-label">Nome <span style="color: red">*</span></label>
+            <label for="account_id" class="col-sm-3 col-form-label">Conta <span style="color: red">*</span></label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" id="cardholder_name" name="cardholder_name" value="{{updt_credcard.cardholder_name}}" required>
+              <select class="form-select" id="account_id" name="account_id" required>
+                  {% for account in accounts %}
+                      <option value="{{ account.id }}" {% if account == updt_transaction.account %}style="color: #fff" selected{% endif %}>{{ account }}</option>
+                  {% endfor %}
+              </select>
             </div>
           </div>
           <div class="form-group row">
-            <label for="expiration_date" class="col-sm-3 col-form-label">Data de Expiração <span style="color: red">*</span></label>
+            <label for="category" class="col-sm-3 col-form-label">Categoria <span style="color: red">*</span></label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" id="expiration_date" name="expiration_date" oninput="formatMonthYear(this);" value="{{updt_credcard.expiration_date}}" maxlength="7" required>
+              <select class="form-select" id="category" name="category" required>
+                  {% for code, name in categorys %}
+                      <option value="{{ code }}" {% if code == updt_transaction.category %}style="color: #fff" selected{% endif %}>{{ name }}</option>
+                  {% endfor %}
+              </select>
             </div>
           </div>
           <div class="form-group row">
-            <label for="limit" class="col-sm-3 col-form-label">Limite <span style="color: red">*</span></label>
+            <label for="value" class="col-sm-3 col-form-label">Valor <span style="color: red">*</span></label>
             <div class="col-sm-9">
               <div class="input-group">
                 <div class="input-group-prepend">
                   <span class="input-group-text bg-primary text-white">$</span>
                 </div>
-                <input type="number" class="form-control" id="limit" name="limit" value="{{updt_credcard.get_format_limit_value}}" required>
+                <input type="number" class="form-control" id="value" name="value" value="{{updt_transaction.get_format_value}}" required>
                 <div class="input-group-append">
                   <span class="input-group-text">.00</span>
                 </div>
@@ -53,23 +61,25 @@
             </div>
           </div>
           <div class="form-group row">
-            <label for="current_limit" class="col-sm-3 col-form-label">Limite Disponível <span style="color: red">*</span></label>
+            <label for="transaction_date" class="col-sm-3 col-form-label">Data da transação <span style="color: red">*</span></label>
             <div class="col-sm-9">
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text bg-primary text-white">$</span>
-                </div>
-                <input type="number" class="form-control" id="current_limit" name="current_limit" value="{{updt_credcard.get_format_current_limit_value}}" required>
-                <div class="input-group-append">
-                  <span class="input-group-text">.00</span>
-                </div>
-              </div>
+              <input type="date" class="form-control" id="transaction_date" name="transaction_date" value="{{updt_transaction.get_data_transaction_date}}"  required>
             </div>
           </div>
           <div class="form-group row">
-            <label for="surname" class="col-sm-3 col-form-label">Apelido <span style="color: red">*</span></label>
+            <label for="description" class="col-sm-3 col-form-label">Descrição <span style="color: red">*</span></label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" id="surname" name="surname" value="{{updt_credcard.surname}}" required>
+              <input type="text" class="form-control" id="description" name="description" value="{{updt_transaction.description}}" required>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="transaction_type" class="col-sm-3 col-form-label">Tipo <span style="color: red">*</span></label>
+            <div class="col-sm-9">
+              <select class="form-select" id="transaction_type" name="transaction_type" required>
+                  {% for code, name in types %}
+                    <option value="{{ code }}" {% if code == updt_transaction.transaction_type %}style="color: #fff" selected{% endif %}>{{ name }}</option>
+                  {% endfor %}
+              </select>
             </div>
           </div>
           <div class="form-group row">

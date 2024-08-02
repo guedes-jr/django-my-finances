@@ -31,11 +31,20 @@ class Transaction(models.Model):
     transaction_type = models.CharField(max_length=10, choices=constants.TRANSACTION_TYPES, verbose_name="Tipo de Transação")
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def get_transaction_type_display(self):
-        return dict(constants.TRANSACTION_TYPES).get(self.transaction_type, 'Desconhecido')
-
     def __str__(self):
         return f"{self.get_transaction_type_display()} - {self.value}"
+    
+    def get_transaction_type_display(self):
+        return dict(constants.TRANSACTION_TYPES).get(self.transaction_type, 'Desconhecido')
+    
+    def get_category_display(self):
+        return dict(constants.CATEGORY_CHOICES).get(self.description, 'Desconhecido')
+    
+    def get_format_value(self):
+        return str(self.value)
+    
+    def get_data_transaction_date(self):
+        return self.transaction_date.strftime('%Y-%m-%d')
 
 class CreditCard(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, default=1)
