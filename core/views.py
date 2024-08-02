@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.messages import constants
 from decimal import Decimal
 from datetime import datetime
-from .models import Account, Goal, CreditCard
+from .models import Account, Goal, CreditCard, Transaction
 from . import constants as c
 
 @login_required
@@ -209,11 +209,63 @@ def update_credcard(request, id):
                           'updt_credcard' : updt_credcard,
                       })
 
-
 @login_required
-def icons(request):
-    return render(request, 'icons/font-awesome.html')
+def transaction(request):
+    if request.method == 'POST':
+        try:
+            new_transaction = Transaction(
+                user = request.user,
+                
+                created_at=datetime.now(),
+            )
+            new_transaction.save()
+        except Exception as e:
+            messages.add_message(request, constants.ERROR, f'{e}\n{new_transaction.__dict__}')
 
+    credcards = CreditCard.objects.filter(user=request.user)
+    return render(request, 
+                    'credcard/credcards.html', 
+                    { 
+                        'credcards': credcards
+                    })
+    
 @login_required
-def documentation(request):
-    return render(request, 'docs/documentation.html')
+def delete_transaction(request, id):
+    dlt_portifolio = CreditCard.objects.filter(id=id)
+    if dlt_portifolio.count() > 0:
+        try:
+            dlt_portifolio.delete()
+            messages.add_message(request, constants.SUCCESS, 'Cartão de crétido removido com sucesso!')
+        except Exception as e:
+            messages.add_message(request, constants.ERROR, f'Erro ao remover a Cartão de crédito, erro: {e}')
+    else:
+        messages.add_message(request, constants.ERROR, f'Não existe nenhum Cartão de crédito com o ID {id}')
+    return redirect('transaction')
+
+
+def update_transaction(request, id):
+    if request.method == 'POST':
+        card_id = request.POST.get('id')
+        surname = request.POST.get('surname')
+        try:
+            CreditCard.objects.filter(pk=card_id) \
+                .update(
+                        surname = surname,
+                        cardholder_name=request.POST.get('cardholder_name'),
+                        expiration_date=request.POST.get('expiration_date'),
+                        limit=Decimal(request.POST.get('limit')),
+                        current_limit=Decimal(request.POST.get('current_limit'))
+                    )
+                
+            messages.add_message(request, constants.SUCCESS, f'Cartão de crédito {surname} atualizada com sucesso!')
+        except Exception as e:
+            messages.add_message(request, constants.ERROR, e)
+        return redirect('transaction')
+        
+    else:
+        updt_transaction = get_object_or_404(CreditCard, id=id)
+        return render(request,
+                      'transaction/update_transaction.html',
+                      {
+                          'updt_transaction' : updt_transaction,
+                      })

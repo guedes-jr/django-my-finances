@@ -12,6 +12,7 @@ urlpatterns = [
     path('credcard/', views.credcard, name='credcard'),
     path('credcard/update/<int:id>', views.update_credcard, name='update_credcard'),
     path('credcard/delete/<int:id>', views.delete_credcard, name='delete_credcard'),
-    path('icons/', views.icons, name='icons'),
-    path('pages/documentation', views.documentation, name='documentation'),
+    path('transaction/', views.transaction, name='transaction'),
+    path('transaction/update/<int:id>', views.update_transaction, name='update_transaction'),
+    path('transaction/delete/<int:id>', views.delete_transaction, name='delete_transaction'),
 ]

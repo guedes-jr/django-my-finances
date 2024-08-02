@@ -1,8 +1,10 @@
 from django.urls import path
-from .views import signup, signout, access
+from . import views
 
 urlpatterns = [
-    path('login/', access, name='login'),
-    path('logout/', signout, name='signout'),
-    path('signup/', signup, name='signup'),
+    path('login/', views.access, name='login'),
+    path('logout/', views.signout, name='signout'),
+    path('signup/', views.signup, name='signup'),
+    path('perfil/', views.perfil, name='perfil'),
+    path('perfil/delete/<int:id>', views.delete_perfil, name='delete_perfil'),
 ]

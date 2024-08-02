@@ -1,0 +1,247 @@
+{% extends 'shared/base.html' %}
+
+{% load static %}
+{% load math_filters %}
+
+{% block title %}Carteias{% endblock %}
+
+{% block content %}
+<div class="modal fade" id="modal_1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content modal-lg">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Editar meu Perfil</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+          <form class="forms-sample" method="post" enctype="multipart/form-data" action="{% url 'perfil' %}"> {% csrf_token %}
+            <input type="hidden" name="id" value="{{user.id}}" />
+            <div class="form-group">
+                <label>Primeiro Nome</label>
+                <input type="text" name="first_name" value="{{user.first_name}}" class="form-control p_input">
+            </div>
+            <div class="form-group">
+                <label>Último Nome</label>
+                <input type="text" name="last_name" value="{{user.last_name}}" class="form-control p_input">
+            </div>
+            <div class="form-group">
+                <label>CPF ou CNPJ</label>
+                <input type="text" name="cpf_cnpj" value="{{user.cpf_cnpj}}" class="form-control p_input">
+            </div>
+            <div class="form-group">
+                <label>Usuário</label>
+                <input type="text" name="username" value="{{user.username}}" class="form-control p_input">
+                <p style="color: rgb(141, 37, 37)">Obrigatório. 150 caracteres ou menos. Letras, números e @/./+/-/_ apenas.</p>
+            </div>
+            <div class="form-group">
+                <label>E-mail</label>
+                <input type="email" name="email" value="{{user.email}}" class="form-control p_input">
+            </div>
+            <div class="form-group">
+                <label>Data de nascimento</label>
+                <input type="date" name="birth_date" value="{{user.get_data_birth_date}}" class="form-control p_input">
+            </div>
+            <div class="form-group">
+                <label>Telefone</label>
+                <input type="text" name="phone_number" value="{{user.phone_number}}" class="form-control p_input">
+            </div>
+            <div class="form-group">
+                <label>Endereço</label>
+                <input type="text" name="address" value="{{user.address}}" class="form-control p_input">
+            </div>
+            <div class="form-group">
+                <label for="exampleTextarea1">Biografia</label>
+                <textarea class="form-control" name="bio" value="{{user.bio}}" id="exampleTextarea1" rows="4"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="exampleTextarea1">Descrição</label>
+                <textarea class="form-control" name="description" value="{{user.description}}" id="exampleTextarea1" rows="4"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Foto de perfil</label>
+                <input type="file" name="avatar" class="file-upload-default" style="display: none;">
+                <div class="input-group col-xs-12 d-flex align-items-center">
+                    <input type="text" class="form-control file-upload-info" placeholder="Upload Image" value="{{user.avatar.url}}" disabled>
+                    <span class="input-group-append ms-2">
+                        <button class="file-upload-browse btn btn-primary" type="button">Upload</button>
+                    </span>
+                </div>
+                <div class="image-preview mt-3 d-flex justify-content-center">
+                    <img id="imagePreview" src="#" alt="Image Preview" style="display: none;">
+                </div>
+            </div>                                                           
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-primary">Cadastrar</button>
+            </div>
+          </form>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modal_2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content modal-lg">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Alterar a senha</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
+          </div>
+          <div class="modal-body">
+            <form class="forms-sample" method="post" enctype="multipart/form-data" action="{% url 'perfil' %}"> {% csrf_token %}
+              <input type="hidden" name="id" value="{{user.id}}" />
+              <div class="form-group">
+                <label>Senha</label>
+                <input type="password" name="password" class="form-control p_input">
+                <ul style="color: rgb(141, 37, 37)">
+                    <li>Sua senha não pode ser muito parecida com o resto das suas informações pessoais.</li>
+                    <li>Sua senha precisa conter pelo menos 8 caracteres.</li>
+                    <li>Sua senha não pode ser uma senha comumente utilizada.</li>
+                    <li>Sua senha não pode ser inteiramente numérica.</li>
+                </ul>
+            </div>
+            <div class="form-group">
+                <label>Confirmar Senha</label>
+                <input type="password" name="confirm_password" class="form-control p_input">
+            </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Cadastrar</button>
+              </div>
+            </form>
+          </div>
+      </div>
+    </div>
+  </div>
+
+<div class="page-header">
+  <h3 class="page-title"> Meu Perfil </h3>
+  {% if messages %} {% for message in messages %}
+  <br />
+  <section class="alert {{message.tags}}">{{ message }}</section>
+  {% endfor %} {% endif %}
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active" aria-current="page">perfil</li>
+    </ol>
+  </nav>
+</div>
+<div class="row">
+  <div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal_1">
+          <i class="fa fa-plus"></i> Editar perfil
+        </button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal_2">
+            <i class="fa fa-plus"></i> Alterar Senha
+          </button>
+        </p>
+        <div class="container">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <img class="rounded mx-auto d-block" style="width: 60%; height: 80%" src="{{user.avatar.url}}" alt="avatar">
+                    </div>
+                    <div class="col">
+                        <h1 class="text-center">{{user.first_name}} {{user.last_name}}
+                            <small style="color: gray; font-size: 2rem">({{user.username}})</small>
+                        </h1>
+                        
+                            {{user.bio}}
+                        <br />
+                        <hr />
+                        <div class="form-group row">
+                            <strong class="col-sm-4 col-form-label">CPF/CNPJ: </strong>
+                            <div class="col-sm-6">
+                                {{user.cpf_cnpj}}
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <strong class="col-sm-4 col-form-label">Descrição: </strong>
+                            <div class="col-sm-6">
+                                {{user.description}}
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <strong class="col-sm-4 col-form-label">Telefone: </strong>
+                            <div class="col-sm-6">
+                                {{user.phone_number}}
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <strong class="col-sm-4 col-form-label">E-mail: </strong>
+                            <div class="col-sm-6">
+                                {{user.email}}
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <strong class="col-sm-4 col-form-label">Endereço:</strong>
+                            <div class="col-sm-6">
+                                {{user.address}}
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <strong class="col-sm-4 col-form-label">Data de aniversário </strong>
+                            <div class="col-sm-6">
+                                {{user.birth_date}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <hr />
+            <div class="container text-center">
+                <div class="row">
+                    <div class="col">
+                        <a href="{% url 'portifolio' %}" style="text-decoration: none">
+                            <ul class="list-group">
+                                <li class="list-group-item active d-flex justify-content-between align-items-start" aria-current="true">
+                                    Minhas Contas
+                                    <span class="badge text-bg-primary rounded-pill">{{accounts|length}}</span>
+                                </li>
+                                {% for account in accounts %}
+                                    <li class="list-group-item bg-dark">{{account}}</li>
+                                {% endfor %}
+                            </ul>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="{% url 'goal' %}" style="text-decoration: none">
+                            <ul class="list-group">
+                                <li class="list-group-item active d-flex justify-content-between align-items-start" aria-current="true">
+                                    Minhas Metas
+                                    <span class="badge text-bg-primary rounded-pill">{{goals|length}}</span>
+                                </li>
+                                {% for goal in goals %}
+                                    <li class="list-group-item bg-dark">{{goal.description}} - {{goal.category}}</li>
+                                {% endfor %}
+                            </ul>
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="{% url 'credcard' %}" style="text-decoration: none">
+                            <ul class="list-group">
+                                <li class="list-group-item active d-flex justify-content-between align-items-start" aria-current="true">
+                                    Meus Cartões de Crédito
+                                    <span class="badge text-bg-primary rounded-pill">{{credcards|length}}</span>
+                                </li>
+                                {% for credcard in credcards %}
+                                    <li class="list-group-item bg-dark">{{credcard}}</li>
+                                {% endfor %}
+                            </ul>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
